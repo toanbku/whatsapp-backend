@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const Pusher = require("pusher");
+const cors = require("cors");
 const Messages = require('./dbMessages.js');
 
 
@@ -19,11 +20,7 @@ const pusher = new Pusher({
 
 // middleware
 app.use(express.json());
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "*");
-  next();
-})
+app.use(cors());
 
 // DB config
 const connection_url = 'mongodb+srv://admin:Q7xp8tZbmYj2JAGk@cluster0.aa9qf.mongodb.net/whatsappdb?retryWrites=true&w=majority';
@@ -50,6 +47,7 @@ db.once('open', () => {
         {
           name: messageDetails.name,
           message: messageDetails.message,
+          timestamp: messageDetails.timestamp,
         }
       )
     } else {
